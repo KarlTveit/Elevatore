@@ -18,14 +18,14 @@ int curr_floor = 0;
 int dir = 0;
 
 void ev_start(void){
-
+printf("are u serious?");
     if (elev_get_floor_sensor_signal() == -1) {
-        elev_set_motor_direction(-1);
-
-        if (elev_get_floor_sensor_signal() != -1) {
-            elev_set_motor_direction(0);
-        }
+        elev_set_motor_direction(1);
     }
+      else if (elev_get_floor_sensor_signal() != -1) {
+            elev_set_motor_direction(DIRN_STOP);
+        }
+
     else    elev_set_motor_direction(0);
 }
 

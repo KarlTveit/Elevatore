@@ -3,10 +3,10 @@
 
 int qu_matrix[4][3] = {0};
 
-int qu_setQueue(int dir, int floor){
+void qu_setQueue(int dir, int floor){
 
-    qu_matrix[dir][floor] = 1;
-  return qu_readQueue(dir, floor);
+    qu_matrix[floor][dir] = 1;
+   qu_readQueue(dir, floor);
 
 
 }
