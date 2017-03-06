@@ -7,6 +7,8 @@ void qu_setQueue(int dir, int floor){
 
     qu_matrix[floor][dir] = 1;
    qu_readQueue(dir, floor);
+   int a = qu_matrix[floor][dir];
+   printf("kommer vi hit ? %d\n", a );
 
 
 }
@@ -19,7 +21,7 @@ int qu_readQueue(int dir, int curr_floor){
    for (int i = 0; i < 4; i++) {
      for (int j = 0; j < 3; j++) {
        if (qu_matrix[i][j]==1){
-         return j;
+         return i;
        }
        else {
          return -1;
@@ -33,7 +35,7 @@ int qu_readQueue(int dir, int curr_floor){
      for (int i = curr_floor; i < 4; i++) {
        for (int j = 0; j < 2; j++) {
          if (qu_matrix[i][j]==1){
-           return j;
+           return i;
          }
        }
      }
@@ -41,7 +43,7 @@ int qu_readQueue(int dir, int curr_floor){
           for (int i = 3; i > -1; i--) {
             for (int j = 0; j < 3; j++) {
               if (qu_matrix[i][j]==1){
-               return j;
+               return i;
               }
             }
           }
@@ -51,7 +53,7 @@ int qu_readQueue(int dir, int curr_floor){
        for (int i = curr_floor; i > -1; i--) {
          for (int j = 1; j < 3; j++) {
            if (qu_matrix[i][j]==1){
-             return j;
+             return i;
            }
          }
        }
@@ -59,7 +61,7 @@ int qu_readQueue(int dir, int curr_floor){
             for (int i = 0; i < 4; i++) {
               for (int j = 0; j < 3; j++) {
                 if (qu_matrix[i][j]==1){
-                 return j;
+                 return i;
                 }
               }
             }

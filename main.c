@@ -14,9 +14,9 @@ int main() {
     }
 
     printf("Press STOP button to stop elevator and exit program.\n");
-
+    printf("mana\n");
     ev_start();
-    printf("hmm");
+    printf("hmm\n");
     while (1) {
 
 
@@ -24,7 +24,7 @@ int main() {
         // Stop elevator and exit program if the stop button is pressed
         if (elev_get_stop_signal()) {
           ev_stopbuttonPressed();
-
+          break;
 
         }
 
