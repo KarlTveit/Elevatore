@@ -23,6 +23,6 @@ void timer_stop(void){
     timerActive = 0;
 }
 
-int timer_isTimeOut(void){
+bool timer_isTimeOut(void){
     return timerActive  &&  (get_wall_time() > timerEndTime);
 }

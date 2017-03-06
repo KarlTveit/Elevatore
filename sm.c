@@ -13,6 +13,7 @@
 #include "timer.h"
 #include "elev.h"
 
+
 int target_floor = 0;
 int curr_floor = 0;
 int dir = 0;
@@ -23,52 +24,62 @@ printf("are u serious?");
         elev_set_motor_direction(1);
     }
     elev_set_motor_direction(0);
+    timer_start(3);
+
+
 }
 
 void ev_floorSensorActive(int floor){
-    printf("hallo?");
+
     curr_floor = floor;
     elev_set_floor_indicator(floor);
     target_floor = qu_readQueue(dir, curr_floor);
-    while (curr_floor!= target_floor) {
+    while (target_floor!= -1) {
+      if (elev_get_floor_sensor_signal() != -1) {
+        curr_floor = elev_get_floor_sensor_signal();
+      }
     if (target_floor < curr_floor){
       dir = -1;
       elev_set_motor_direction(-1);
     }
 
-    if (target_floor > curr_floor) {
+    else if (target_floor > curr_floor) {
       dir = 1;
       elev_set_motor_direction(1);
     }
-
-  }
-
-        if (dir == 1) {
-          elev_set_button_lamp(BUTTON_CALL_UP, curr_floor, 0);
-          elev_set_button_lamp(BUTTON_COMMAND, curr_floor, 0);
-            if (curr_floor == 3) {
-              elev_set_button_lamp(BUTTON_CALL_DOWN, curr_floor, 0);
-            }
-        }
-
-        if (dir == -1) {
-          elev_set_button_lamp(BUTTON_CALL_DOWN, curr_floor, 0);
-          elev_set_button_lamp(BUTTON_COMMAND, curr_floor, 0);
-            if (curr_floor == 0) {
-              elev_set_button_lamp(BUTTON_CALL_UP, curr_floor, 0);
-            }
-        }
+    else if (target_floor == curr_floor) {
 
       elev_set_motor_direction(0);
+
+      if (dir == 1) {
+        elev_set_button_lamp(BUTTON_CALL_UP, curr_floor, 0);
+        elev_set_button_lamp(BUTTON_COMMAND, curr_floor, 0);
+          if (curr_floor == 3) {
+            elev_set_button_lamp(BUTTON_CALL_DOWN, curr_floor, 0);
+          }
+      }
+
+      if (dir == -1) {
+        elev_set_button_lamp(BUTTON_CALL_DOWN, curr_floor, 0);
+        elev_set_button_lamp(BUTTON_COMMAND, curr_floor, 0);
+
+          if (curr_floor == 0) {
+            elev_set_button_lamp(BUTTON_CALL_UP, curr_floor, 0);
+          }
+      }
+
       timer_start(3);
-      while (!&timer_isTimeOut){
+      while (timer_isTimeOut != true){
       elev_set_door_open_lamp(1);
       }
       timer_stop();
       elev_set_door_open_lamp(0);
       qu_update(dir, curr_floor);
-    }
 
+        break;
+    }
+  }
+}
 
 
 void ev_elevatorRequested(int dir, int floor){
