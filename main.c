@@ -1,8 +1,10 @@
-#include "elev.h"
+
 #include <stdio.h>
 #include "sm.h"
 #include "io.h"
 #include "qu.h"
+#include "elev.h"
+#include "timer.h"
 
 int main() {
     // Initialize hardware
@@ -26,7 +28,7 @@ int main() {
         // Stop elevator and exit program if the stop button is pressed
         if (elev_get_stop_signal()) {
           ev_stopbuttonPressed();
-            
+
             break;
         }
 

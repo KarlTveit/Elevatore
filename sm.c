@@ -9,10 +9,9 @@
 
 
 #include "sm.h"
-#include "elev.h"
-#include "elev.c"
 #include "qu.h"
 #include "timer.h"
+#include "elev.h"
 
 int target_floor = 0;
 int curr_floor = 0;
