@@ -1,9 +1,9 @@
-
-#define sm_h
+#pragma once
 
 #include <stdio.h>
-#include "elev.h"
+#include <stdbool.h>
 
-int ev_floorSensorActive(int floor);
+void ev_floorSensorActive(int floor);
 void ev_start(void);
-int ev_elevatorRequested(int dir, int floor);
+void ev_elevatorRequested(int direction, int floor);
+void ev_stopbuttonPressed();
