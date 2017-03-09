@@ -21,13 +21,14 @@ int dir = 0;
 void ev_start(){
 printf("are u serious?");
     ev_elevatorRequested(0,0);
-    elev_set_motor_direction(1);
+    elev_set_motor_direction(-1);
 
 }
 
 void ev_floorSensorActive(int floorx){
-printf("target:  %d\n curr: %d\n", target_floor, curr_floor );
+
     curr_floor = floorx;
+    printf("target:  %d\n curr: %d\n", target_floor, curr_floor );
     elev_set_floor_indicator(floorx);
     target_floor = qu_readQueue(dir, curr_floor);
 
@@ -100,12 +101,24 @@ void ev_elevatorRequested(int direction, int floor){
 void ev_stopbuttonPressed(){
 printf("når vi fram hit?\n");
   qu_deleteQueue();
+  elev_set_button_lamp(BUTTON_CALL_UP, 0, 0);
+  elev_set_button_lamp(BUTTON_CALL_UP, 1, 0);
+  elev_set_button_lamp(BUTTON_CALL_UP, 2, 0);
+  elev_set_button_lamp(BUTTON_COMMAND, 0, 0);
+  elev_set_button_lamp(BUTTON_COMMAND, 1, 0);
+  elev_set_button_lamp(BUTTON_COMMAND, 2, 0);
+  elev_set_button_lamp(BUTTON_COMMAND, 3, 0);
+  elev_set_button_lamp(BUTTON_CALL_DOWN,1, 0);
+  elev_set_button_lamp(BUTTON_CALL_DOWN,2, 0);
+  elev_set_button_lamp(BUTTON_CALL_DOWN,3, 0);
   elev_set_motor_direction(DIRN_STOP);
   if (elev_get_floor_sensor_signal() !=-1) {
     timer_start(3);
-    while (!&timer_isTimeOut) {
+    while (timer_isTimeOut() != true) {
         elev_set_door_open_lamp(1);
     }
+    timer_stop();
+    elev_set_door_open_lamp(0);
   }
 
 

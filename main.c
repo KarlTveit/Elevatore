@@ -40,14 +40,19 @@ int main() {
             switch (elev_get_floor_sensor_signal()) {
                 case 0:
                     ev_floorSensorActive(0);
+                    break;
                 case 1:
                     ev_floorSensorActive(1);
+                    break;
                 case 2:
                     ev_floorSensorActive(2);
+                    break;
                 case 3:
                     ev_floorSensorActive(3);
-
+                    break;
+              
             }
+
             if (elev_get_button_signal(BUTTON_CALL_UP, 0)) {
                 ev_elevatorRequested(0, 0);
             }
