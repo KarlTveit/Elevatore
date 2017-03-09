@@ -7,9 +7,7 @@ int qu_matrix[4][3] = {0};
 int qu_setQueue(int dir, int floor){
 
     qu_matrix[floor][dir] = 1;
-  //return qu_readQueue(dir, floor);
-   int a = qu_matrix[floor][dir];
-   printf("kommer vi hit ? %d\n", a );
+  
 
 
 }

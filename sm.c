@@ -17,17 +17,19 @@
 int target_floor = 0;
 int curr_floor = 0;
 int dir = 0;
+int timerActive = 0;
+int stopPressed = 0;
 
-void ev_start(){
-printf("are u serious?");
-    ev_elevatorRequested(0,0);
-    elev_set_motor_direction(1);
+void ev_start(int direction){
+
+    elev_set_motor_direction(direction);
 
 }
 
 void ev_floorSensorActive(int floorx){
-printf("target:  %d\n curr: %d\n", target_floor, curr_floor );
+
     curr_floor = floorx;
+
     elev_set_floor_indicator(floorx);
     target_floor = qu_readQueue(dir, curr_floor);
 
@@ -36,13 +38,13 @@ if (target_floor != -1){
     if (target_floor < curr_floor){
       dir = -1;
       elev_set_motor_direction(-1);
-      printf("target < curr\n" );
+
     }
 
      if (target_floor > curr_floor) {
       dir = 1;
       elev_set_motor_direction(1);
-      printf("target > curr\n" );
+
     }
     else if (target_floor == curr_floor) {
 
@@ -62,29 +64,42 @@ if (target_floor != -1){
           elev_set_button_lamp(BUTTON_CALL_UP, curr_floor, 0);
         }
 
+      if (timerActive != 1) {
 
       timer_start(3);
-      while  (timer_isTimeOut() != true){
       elev_set_door_open_lamp(1);
+      timerActive = 1;
     }
-    elev_set_door_open_lamp(0);
-    timer_stop();
-      qu_update(curr_floor);
     }
   }
 }
 
-/*void ev_timesOut(){
-printf("nå er vi i timeout");
+void ev_timesOut(){
+
   timer_stop();
   elev_set_door_open_lamp(0);
+  qu_update(curr_floor);
+  timerActive = 0;
 
-} */
+
+}
 
 
 void ev_elevatorRequested(int direction, int floor){
 
     qu_setQueue(direction, floor);
+
+    if (stopPressed == 1) {
+
+       if ((floor<curr_floor)||((floor == curr_floor)&&(dir == 1))){
+         elev_set_motor_direction(-1);
+         stopPressed = 0;
+       }
+
+      else
+        elev_set_motor_direction(1);
+        stopPressed = 0;
+  }
 
     if (direction==0) {
       elev_set_button_lamp(BUTTON_CALL_UP,floor,1);
@@ -97,15 +112,32 @@ void ev_elevatorRequested(int direction, int floor){
     }
 }
 
-void ev_stopbuttonPressed(){
-printf("når vi fram hit?\n");
+void ev_stopbuttonPressed(int floor){
+
   qu_deleteQueue();
+  elev_set_button_lamp(BUTTON_CALL_UP, 0, 0);
+  elev_set_button_lamp(BUTTON_CALL_UP, 1, 0);
+  elev_set_button_lamp(BUTTON_CALL_UP, 2, 0);
+  elev_set_button_lamp(BUTTON_COMMAND, 0, 0);
+  elev_set_button_lamp(BUTTON_COMMAND, 1, 0);
+  elev_set_button_lamp(BUTTON_COMMAND, 2, 0);
+  elev_set_button_lamp(BUTTON_COMMAND, 3, 0);
+  elev_set_button_lamp(BUTTON_CALL_DOWN,1, 0);
+  elev_set_button_lamp(BUTTON_CALL_DOWN,2, 0);
+  elev_set_button_lamp(BUTTON_CALL_DOWN,3, 0);
   elev_set_motor_direction(DIRN_STOP);
-  if (elev_get_floor_sensor_signal() !=-1) {
+
+  stopPressed = 1;
+
+  if (floor !=-1) {
+
+    if (timerActive != 1) {
+
     timer_start(3);
-    while (!&timer_isTimeOut) {
-        elev_set_door_open_lamp(1);
-    }
+    elev_set_door_open_lamp(1);
+    timerActive = 1;
+
+  }
   }
 
 

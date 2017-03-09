@@ -14,40 +14,47 @@ int main() {
     }
 
     printf("Press STOP button to stop elevator and exit program.\n");
-    printf("mana\n");
-    ev_start();
+
+    while (elev_get_floor_sensor_signal() == -1) {
+      ev_start(-1);
+    }
+      ev_start(0);
 
 
-    printf("hmm\n");
     while (1) {
 
 
 
         // Stop elevator and exit program if the stop button is pressed
         if (elev_get_stop_signal()) {
-          ev_stopbuttonPressed();
-          break;
 
+          ev_stopbuttonPressed(elev_get_floor_sensor_signal());
         }
 
-      /*  if  (timer_isTimeOut() == true){
-          printf("nå er vi i timer_istimeout\n");
+        if  (timer_isTimeOut() == 1){
+
           ev_timesOut();
 
-        } */
+
+        }
 
             // setter lys for nåværende etasje
             switch (elev_get_floor_sensor_signal()) {
                 case 0:
                     ev_floorSensorActive(0);
+                    break;
                 case 1:
                     ev_floorSensorActive(1);
+                    break;
                 case 2:
                     ev_floorSensorActive(2);
+                    break;
                 case 3:
                     ev_floorSensorActive(3);
+                    break;
 
             }
+
             if (elev_get_button_signal(BUTTON_CALL_UP, 0)) {
                 ev_elevatorRequested(0, 0);
             }
